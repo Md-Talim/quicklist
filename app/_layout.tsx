@@ -27,6 +27,7 @@ export default function RootLayout() {
         name="counter"
         options={{
           title: "Counter",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="clock" size={size} color={color} />
           ),
