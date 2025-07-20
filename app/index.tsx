@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 import { ShoppingListItem } from "../components/ShoppingListItem";
 import { theme } from "../theme";
 
@@ -8,16 +8,8 @@ interface ShoppingListItem {
   name: string;
 }
 
-const initialShoppingList: ShoppingListItem[] = [
-  { id: "1", name: "Coffee" },
-  { id: "2", name: "Tea" },
-  { id: "3", name: "Sugar" },
-];
-
 export default function App() {
-  const [shoppingList, setShoppingList] =
-    useState<ShoppingListItem[]>(initialShoppingList);
-
+  const [shoppingList, setShoppingList] = useState<ShoppingListItem[]>([]);
   const [newItemName, setNewItemName] = useState("");
 
   const handleSubmit = () => {
@@ -30,24 +22,27 @@ export default function App() {
   };
 
   return (
-    <ScrollView
+    <FlatList
+      data={shoppingList}
       style={styles.container}
       contentContainerStyle={{ paddingBottom: 24 }}
       stickyHeaderIndices={[0]}
-    >
-      <TextInput
-        placeholder="E.g. Coffee"
-        style={styles.textInput}
-        value={newItemName}
-        onChangeText={setNewItemName}
-        onSubmitEditing={handleSubmit}
-      />
-      <View>
-        {shoppingList.map((item) => (
-          <ShoppingListItem key={item.id} name={item.name} />
-        ))}
-      </View>
-    </ScrollView>
+      ListEmptyComponent={
+        <View style={styles.emptyList}>
+          <Text>Your shopping list is empty</Text>
+        </View>
+      }
+      ListHeaderComponent={
+        <TextInput
+          placeholder="E.g. Coffee"
+          style={styles.textInput}
+          value={newItemName}
+          onChangeText={setNewItemName}
+          onSubmitEditing={handleSubmit}
+        />
+      }
+      renderItem={({ item }) => <ShoppingListItem name={item.name} />}
+    />
   );
 }
 
@@ -56,6 +51,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colorWhite,
     paddingTop: 12,
+  },
+  emptyList: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   textInput: {
     borderWidth: 1,
