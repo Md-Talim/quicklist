@@ -1,3 +1,4 @@
+import { Entypo } from "@expo/vector-icons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import {
   Alert,
@@ -5,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { theme } from "../theme";
 
@@ -47,9 +49,19 @@ export function ShoppingListItem({
       ]}
       onPress={onToggleComplete}
     >
-      <Text style={[styles.itemText, isCompleted && styles.completedItemText]}>
-        {name}
-      </Text>
+      <View style={styles.row}>
+        <Entypo
+          name={isCompleted ? "check" : "circle"}
+          size={24}
+          color={isCompleted ? theme.colorGray : theme.colorBlue}
+        />
+        <Text
+          numberOfLines={1}
+          style={[styles.itemText, isCompleted && styles.completedItemText]}
+        >
+          {name}
+        </Text>
+      </View>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={handleDelete}
@@ -83,9 +95,15 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 18,
     fontWeight: 200,
+    flex: 1,
   },
   completedItemText: {
     color: theme.colorGray,
     textDecorationLine: "line-through",
+  },
+  row: {
+    flexDirection: "row",
+    gap: 8,
+    flex: 1,
   },
 });
