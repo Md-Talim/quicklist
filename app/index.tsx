@@ -6,6 +6,7 @@ import { theme } from "../theme";
 interface ShoppingListItem {
   id: string;
   name: string;
+  completedAtTimeStamp?: number;
 }
 
 export default function App() {
@@ -19,6 +20,26 @@ export default function App() {
       setShoppingList(newShoppingList);
       setNewItemName("");
     }
+  };
+
+  const handleDelete = (idToDelete: string) => {
+    const newShoppingList = shoppingList.filter(
+      (item) => item.id !== idToDelete
+    );
+    setShoppingList(newShoppingList);
+  };
+
+  const handleToggleComplete = (idToMarkComplete: string) => {
+    const newShoppingList = shoppingList.map((item) => {
+      if (item.id !== idToMarkComplete) return item;
+      return {
+        ...item,
+        completedAtTimeStamp: item.completedAtTimeStamp
+          ? undefined
+          : Date.now(),
+      };
+    });
+    setShoppingList(newShoppingList);
   };
 
   return (
@@ -41,7 +62,14 @@ export default function App() {
           onSubmitEditing={handleSubmit}
         />
       }
-      renderItem={({ item }) => <ShoppingListItem name={item.name} />}
+      renderItem={({ item }) => (
+        <ShoppingListItem
+          name={item.name}
+          onDelete={() => handleDelete(item.id)}
+          onToggleComplete={() => handleToggleComplete(item.id)}
+          isCompleted={Boolean(item.completedAtTimeStamp)}
+        />
+      )}
     />
   );
 }
