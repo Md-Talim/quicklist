@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { useEffect, useState } from "react";
 import {
   FlatList,
@@ -54,6 +55,7 @@ export default function App() {
       (item) => item.id !== idToDelete
     );
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     saveToStorage(storageKey, newShoppingList);
     setShoppingList(newShoppingList);
   };
@@ -61,6 +63,11 @@ export default function App() {
   const handleToggleComplete = (idToMarkComplete: string) => {
     const newShoppingList: ShoppingListItem[] = shoppingList.map((item) => {
       if (item.id !== idToMarkComplete) return item;
+      if (item.lastUpdatedTimestamp) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      } else {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      }
       return {
         ...item,
         lastUpdatedTimestamp: Date.now(),
