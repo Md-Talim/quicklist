@@ -1,9 +1,22 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { theme } from "../../theme";
+import { registerForPushNotificationsAsync } from "../../utils/notification";
 
 export default function CounterScreen() {
+  const handleRequestPermission = async () => {
+    const result = await registerForPushNotificationsAsync();
+    console.log(result);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Counter</Text>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={styles.button}
+        onPress={handleRequestPermission}
+      >
+        <Text style={styles.buttonText}>Request Permission</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -15,7 +28,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
   },
-  text: {
-    fontSize: 24,
+  button: {
+    backgroundColor: theme.colorBlack,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingBlock: 8,
+  },
+  buttonText: {
+    color: theme.colorWhite,
+    fontWeight: "bold",
+    letterSpacing: 1,
+    textTransform: "uppercase",
   },
 });
