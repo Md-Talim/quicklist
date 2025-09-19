@@ -20,7 +20,7 @@ export default function CounterLayout() {
 
 function HistoryButton() {
   return (
-    <Link href="/counter/history">
+    <Link href="/counter/history" asChild>
       <Pressable hitSlop={20}>
         <FontAwesome5 name="history" size={24} color={theme.colorGray} />
       </Pressable>

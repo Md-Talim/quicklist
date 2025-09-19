@@ -15,9 +15,9 @@ import { registerForPushNotificationsAsync } from "../../utils/notification";
 import { getFromStorage, saveToStorage } from "../../utils/storage";
 
 const frequency = 10 * 1000;
-const countdownStorageKey = "countdown";
+export const countdownStorageKey = "countdown";
 
-interface PersistedCountdownState {
+export interface PersistedCountdownState {
   currentNotificationId: string | undefined;
   completedAtTimestamps: number[];
 }
