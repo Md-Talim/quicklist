@@ -1,7 +1,14 @@
 import { Duration, intervalToDuration, isBefore } from "date-fns";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { TimeSegment } from "../../components/TimeSegment";
 import { theme } from "../../theme";
 import { registerForPushNotificationsAsync } from "../../utils/notification";
@@ -21,6 +28,7 @@ interface CountdownStatus {
 }
 
 export default function CounterScreen() {
+  const [isLoading, setIsLoading] = useState(true);
   const [countdownState, setCountdownState] =
     useState<PersistedCountdownState>();
   const [status, setStatus] = useState<CountdownStatus>({
@@ -43,6 +51,9 @@ export default function CounterScreen() {
       const timestamp = lastCompletedAt
         ? lastCompletedAt + frequency
         : Date.now();
+      if (lastCompletedAt) {
+        setIsLoading(false);
+      }
       const isOverdue = isBefore(timestamp, Date.now());
       const distance = intervalToDuration(
         isOverdue
@@ -94,6 +105,14 @@ export default function CounterScreen() {
     setCountdownState(newCountdownState);
     await saveToStorage(countdownStorageKey, newCountdownState);
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.acitivityIndicatorContainer}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, status.isOverdue && styles.containerLate]}>
@@ -172,5 +191,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     marginBlock: 24,
+  },
+  acitivityIndicatorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.colorWhite,
   },
 });
